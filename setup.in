@@ -50,7 +50,7 @@ if [[ -z $1 || $1 = @(-h|--help) ]]; then
 fi
 
 version="${0##*/} version 1.0"
-_site="https://github.com/ilbatista"
+_site="https://gitlab.com/terminalroot"
 repo="arch/raw/master"
 
 set_configs(){
@@ -68,16 +68,16 @@ set_mirror(){
 
     [[ ! "$(which wget)" ]] && echo "Need install wget." && exit 1
 	wget "$_site/$repo/mirror-br" -O /etc/pacman.d/mirrorlist 2>/dev/null
-
+	
 }
 
 set_sudouser(){
 
     [[ -z "$2" ]] && echo "Set name user." && exit 1
     muser=$(echo "$2" | tr -d ' _-' | tr 'A-Z' 'a-z')
-
+    
     echo "Your user: $muser. Enter and repeat your password:"
-	useradd -m -g users -G wheel,storage,power,video,network -s /bin/bash "$muser"
+	useradd -m -g users -G wheel,storage,power,video,network -s /bin/bash "$muser"    
 	passwd "$muser"
 	pacman -S sudo --noconfirm
 	sed -i "s/^root ALL=(ALL) ALL$/root ALL=(ALL) ALL\n${muser} ALL=(ALL) ALL\n/" /etc/sudoers
@@ -85,14 +85,14 @@ set_sudouser(){
 	echo "exec i3" > /home/${muser}/.xinitrc && echo "tput bold" >> /home/${muser}/.bashrc
 	echo "xrdb .Xdefaults" >> /home/${muser}/.bashrc
 	echo "Success: user create and included on group sudo"
-
+    
 }
 
 set_install(){
 
-    pacman -S vim xf86-input-mouse xf86-input-keyboard i3-gaps i3status i3lock dmenu awesome-terminal-fonts ttf-font-awesome terminus-font ttf-dejavu adobe-source-code-pro-fonts nitrogen rxvt-unicode rxvt-unicode-terminfo lightdm lightdm-gtk-greeter firefox firefox-i18n-pt-br leafpad bash-completion lxappearance --noconfirm
+    pacman -S vim xorg-server xorg-xinit xorg-apps gvfs-mtp xf86-input-mouse xf86-input-keyboard xf86-input-libinput xf86-video-intel i3-wm i3status i3lock dmenu noto-fonts ttf-ubuntu-font-family ttf-dejavu gnu-free-fonts ttf-liberation ttf-droid ttf-inconsolata ttf-roboto terminus-font ttf-font-awesome awesome-terminal-fonts terminus-font ttf-dejavu xterm git lightdm lightdm-gtk-greeter firefox firefox-i18n-pt-br lxappearance bash-completion --noconfirm
     set_configs
-
+    
 }
 
 
